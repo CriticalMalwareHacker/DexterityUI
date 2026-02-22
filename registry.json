@@ -1,0 +1,55 @@
+{
+    "$schema": "https://ui.shadcn.com/schema/registry.json",
+    "name": "sub-components",
+    "homepage": "https://ui-components.vercel.app",
+    "items": [
+        {
+            "name": "button",
+            "type": "registry:block",
+            "title": "Button",
+            "description": "A versatile button component with multiple variants and sizes. Supports asChild pattern via Radix Slot.",
+            "dependencies": [
+                "@radix-ui/react-slot",
+                "class-variance-authority"
+            ],
+            "registryDependencies": [],
+            "files": [
+                {
+                    "path": "registry/default/button/button.tsx",
+                    "type": "registry:component"
+                }
+            ]
+        },
+        {
+            "name": "card",
+            "type": "registry:block",
+            "title": "Card",
+            "description": "A card component with header, title, description, action, content, and footer sub-components.",
+            "dependencies": [],
+            "registryDependencies": [],
+            "files": [
+                {
+                    "path": "registry/default/card/card.tsx",
+                    "type": "registry:component"
+                }
+            ]
+        },
+        {
+            "name": "badge",
+            "type": "registry:block",
+            "title": "Badge",
+            "description": "A badge component with default, secondary, destructive, and outline variants.",
+            "dependencies": [
+                "@radix-ui/react-slot",
+                "class-variance-authority"
+            ],
+            "registryDependencies": [],
+            "files": [
+                {
+                    "path": "registry/default/badge/badge.tsx",
+                    "type": "registry:component"
+                }
+            ]
+        }
+    ]
+}
