@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/registry/default/button/button";
+import { Badge } from "@/registry/default/badge/badge";
 
-const installCommand = `npx shadcn@latest add "https://dexterityui.vercel.app/r/button.json"`;
+const installCommand = `npx shadcn@latest add "https://dexterityui.vercel.app/r/badge.json"`;
 
-const usageCode = `import { Button } from "@/components/ui/button"
+const usageCode = `import { Badge } from "@/components/ui/badge"
 
 export default function Example() {
-    return <Button>Click me</Button>
+    return <Badge>New</Badge>
 }`;
 
 const sourceCode = `import * as React from "react"
@@ -17,41 +17,33 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-const buttonVariants = cva(
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 cursor-pointer ...",
+const badgeVariants = cva(
+    "inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 ...",
     {
         variants: {
             variant: {
-                default: "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-                destructive: "bg-destructive text-white shadow-xs hover:bg-destructive/90",
-                outline: "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
-                secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-                ghost: "hover:bg-accent hover:text-accent-foreground",
-                link: "text-primary underline-offset-4 hover:underline",
-            },
-            size: {
-                default: "h-9 px-4 py-2",
-                sm: "h-8 rounded-md gap-1.5 px-3",
-                lg: "h-10 rounded-md px-6",
-                icon: "size-9",
+                default: "border-transparent bg-primary text-primary-foreground",
+                secondary: "border-transparent bg-secondary text-secondary-foreground",
+                destructive: "border-transparent bg-destructive text-white",
+                outline: "text-foreground",
             },
         },
-        defaultVariants: { variant: "default", size: "default" },
+        defaultVariants: { variant: "default" },
     }
 )
 
-function Button({ className, variant, size, asChild = false, ...props }) {
-    const Comp = asChild ? Slot : "button"
+function Badge({ className, variant, asChild = false, ...props }) {
+    const Comp = asChild ? Slot : "span"
     return (
         <Comp
-            data-slot="button"
-            className={cn(buttonVariants({ variant, size, className }))}
+            data-slot="badge"
+            className={cn(badgeVariants({ variant }), className)}
             {...props}
         />
     )
 }
 
-export { Button, buttonVariants }`;
+export { Badge, badgeVariants }`;
 
 /* ─── Copy button ─── */
 function CopyButton({ text }: { text: string }) {
@@ -126,14 +118,14 @@ function Tabs({ tabs }: { tabs: { label: string; content: React.ReactNode }[] })
 }
 
 /* ─── Page ─── */
-export default function ButtonPage() {
+export default function BadgePage() {
     return (
         <div className="max-w-4xl space-y-10">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-white mb-2">Button</h1>
+                <h1 className="text-3xl font-bold text-white mb-2">Badge</h1>
                 <p className="text-neutral-400 text-lg">
-                    A versatile button component with multiple variants and sizes.
+                    A badge component with default, secondary, destructive, and outline variants.
                     Supports the <code className="text-neutral-300 bg-[#1a1a1a] px-1.5 py-0.5 rounded text-sm">asChild</code> pattern via Radix Slot.
                 </p>
             </div>
@@ -146,12 +138,10 @@ export default function ButtonPage() {
                             label: "Preview",
                             content: (
                                 <div className="rounded-lg border border-[#1a1a1a] bg-[#111111] p-10 flex flex-wrap items-center justify-center gap-4">
-                                    <Button variant="default">Default</Button>
-                                    <Button variant="secondary">Secondary</Button>
-                                    <Button variant="destructive">Destructive</Button>
-                                    <Button variant="outline">Outline</Button>
-                                    <Button variant="ghost">Ghost</Button>
-                                    <Button variant="link">Link</Button>
+                                    <Badge variant="default">Default</Badge>
+                                    <Badge variant="secondary">Secondary</Badge>
+                                    <Badge variant="destructive">Destructive</Badge>
+                                    <Badge variant="outline">Outline</Badge>
                                 </div>
                             ),
                         },
@@ -169,7 +159,7 @@ export default function ButtonPage() {
 
                 <div className="space-y-3">
                     <p className="text-neutral-400 text-sm">
-                        Install the button component via the shadcn CLI:
+                        Install the badge component via the shadcn CLI:
                     </p>
                     <CodeBlock code={installCommand} language="bash" />
                 </div>
@@ -191,18 +181,14 @@ export default function ButtonPage() {
                 </div>
             </section>
 
-            {/* Sizes */}
+            {/* Examples */}
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold text-white">Sizes</h2>
+                <h2 className="text-xl font-semibold text-white">Examples</h2>
                 <div className="rounded-lg border border-[#1a1a1a] bg-[#111111] p-10 flex flex-wrap items-center justify-center gap-4">
-                    <Button size="sm">Small</Button>
-                    <Button size="default">Default</Button>
-                    <Button size="lg">Large</Button>
-                    <Button size="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                    </Button>
+                    <Badge variant="default">v1.0.0</Badge>
+                    <Badge variant="secondary">Beta</Badge>
+                    <Badge variant="destructive">Deprecated</Badge>
+                    <Badge variant="outline">Coming Soon</Badge>
                 </div>
             </section>
 
