@@ -111,6 +111,8 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
         { name: "Badge", href: "/Documentation/Components/badge" },
         { name: "Button", href: "/Documentation/Components/button" },
         { name: "Card", href: "/Documentation/Components/card" },
+        { name: "Login", href: "/Documentation/Components/login" },
+        { name: "Signup", href: "/Documentation/Components/signup" },
     ];
 
     const profileRef = useRef<HTMLButtonElement | null>(null);

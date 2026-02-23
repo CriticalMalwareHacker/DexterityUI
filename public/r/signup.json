@@ -1,0 +1,15 @@
+{
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "signup",
+    "title": "Signup Form",
+    "description": "A dark-themed signup form with name, email, password fields, live password strength indicator, custom checkbox, Google OAuth button, and loading state.",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": [
+        {
+            "path": "registry/default/signup/signup.tsx",
+            "type": "registry:component"
+        }
+    ],
+    "type": "registry:block"
+}

@@ -69,11 +69,6 @@ export function HeroSection() {
 						<PhoneCallIcon data-icon="inline-start" className="size-4 mr-2" />{" "}
 						Book a Call
 					</Button>
-					<Button className="rounded-full " size="lg">
-						Get started{" "}
-						<ArrowRightIcon
-							className="size-4 ms-2" data-icon="inline-end" />
-					</Button>
 				</div>
 			</div>
 		</section>

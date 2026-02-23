@@ -2,10 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon, PhoneCallIcon, Github, Star } from "lucide-react";
+import { ArrowRightIcon, Github, Star } from "lucide-react";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import TextPressure from "@/components/text-pressure";
 
 export function HeroContent() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -55,14 +56,33 @@ export function HeroContent() {
                 <ArrowRightIcon className="size-3 duration-150 ease-out group-hover:translate-x-1" />
             </a>
 
+            {/* ── TextPressure title ── */}
+            <div
+                data-animate
+                className="w-full"
+                style={{ height: "clamp(72px, 12vw, 200px)" }}
+            >
+                <TextPressure
+                    text="Dexterity UI"
+                    flex={true}
+                    alpha={false}
+                    stroke={false}
+                    width={true}
+                    weight={true}
+                    italic={true}
+                    textColor="#ffffff"
+                    minFontSize={36}
+                    widthFactor={1.15}
+                />
+            </div>
+
             <h1
                 data-animate
                 className={cn(
-                    "text-balance text-center text-4xl tracking-tight md:text-5xl lg:text-6xl",
-                    "text-shadow-[0_0px_50px_theme(--color-foreground/.2)]"
+                    "text-balance text-center text-xl tracking-tight md:text-2xl lg:text-3xl text-foreground/50",
                 )}
             >
-                A Niche UI Library<br /> For Developers
+                A Niche UI Library. For Developers
             </h1>
 
             <p
@@ -76,15 +96,13 @@ export function HeroContent() {
                 data-animate
                 className="flex flex-row flex-wrap items-center justify-center gap-3 pt-2"
             >
-                <Button
-                    className="rounded-full border border-foreground/20 bg-transparent text-foreground hover:bg-foreground/10"
-                    size="lg"
-                >
-                    Get Started
-                </Button>
                 <Link href="/Documentation">
                     <Button
-                        className="rounded-full bg-white text-black hover:bg-white/90"
+                        className={cn(
+                            "rounded-full size-lg border animate-bg-shine bg-[length:200%_100%] tracking-wide duration-[2200ms] shadow",
+                            "dark:bg-[linear-gradient(110deg,#09090B,45%,#27272A,55%,#09090B)] dark:text-zinc-200 dark:border-zinc-800",
+                            "bg-[linear-gradient(110deg,#FFF,45%,#E4E4E7,55%,#FFF)] text-zinc-800 border-zinc-300",
+                        )}
                         size="lg"
                     >
                         Browse Components{" "}

@@ -1,0 +1,15 @@
+{
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "login",
+    "title": "Login Form",
+    "description": "A dark-themed login form with email/password fields, show/hide password toggle, Google OAuth button, forgot password link, and loading state.",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": [
+        {
+            "path": "registry/default/login/login.tsx",
+            "type": "registry:component"
+        }
+    ],
+    "type": "registry:block"
+}
