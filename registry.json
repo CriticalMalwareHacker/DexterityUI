@@ -64,6 +64,22 @@
                     "type": "registry:component"
                 }
             ]
+        },
+        {
+            "name": "draggable-card",
+            "type": "registry:block",
+            "title": "Draggable Card",
+            "description": "A physics-driven draggable card with 3D tilt, glare effect, and momentum-based spring animations.",
+            "dependencies": [
+                "motion"
+            ],
+            "registryDependencies": [],
+            "files": [
+                {
+                    "path": "registry/default/draggable-card/draggable-card.tsx",
+                    "type": "registry:component"
+                }
+            ]
         }
     ]
 }

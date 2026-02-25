@@ -134,6 +134,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
         { name: "Button", href: "/Documentation/Components/button" },
         { name: "Card", href: "/Documentation/Components/card" },
         { name: "Comet Card", href: "/Documentation/Components/comet-card" },
+        { name: "Draggable Card", href: "/Documentation/Components/draggable-card" },
         { name: "Login", href: "/Documentation/Components/login" },
         { name: "Signup", href: "/Documentation/Components/signup" },
     ];
