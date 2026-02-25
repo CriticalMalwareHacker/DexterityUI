@@ -50,6 +50,20 @@
                     "type": "registry:component"
                 }
             ]
+        },
+        {
+            "name": "comet-card",
+            "type": "registry:block",
+            "title": "Comet Card",
+            "description": "An image card with hover zoom, rotating gradient border (comet variant), and 3D tilt effect on mouse movement.",
+            "dependencies": [],
+            "registryDependencies": [],
+            "files": [
+                {
+                    "path": "registry/default/comet-card/comet-card.tsx",
+                    "type": "registry:component"
+                }
+            ]
         }
     ]
 }

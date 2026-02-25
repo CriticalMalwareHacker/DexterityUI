@@ -23,6 +23,19 @@
   }
 }
 
+/* Comet-card rotating gradient border */
+@property --comet-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes comet-spin {
+  to {
+    --comet-angle: 360deg;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
