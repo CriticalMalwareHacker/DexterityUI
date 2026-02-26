@@ -23,6 +23,45 @@
   }
 }
 
+/* Comet-card rotating gradient border */
+@property --comet-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes comet-spin {
+  to {
+    --comet-angle: 360deg;
+  }
+}
+
+/* Draggable-card rotating gradient border */
+@property --drag-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes drag-border-spin {
+  to {
+    --drag-angle: 360deg;
+  }
+}
+
+/* Starfield twinkle for demo */
+@keyframes star-twinkle {
+  0% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

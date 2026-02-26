@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 type MenuItem = { name: string; href: string; icon?: React.ReactElement | string };
 
@@ -9,20 +11,26 @@ interface SidebarProps {
     onToggle: () => void;
 }
 
-/* ─── Collapsible sub-menu — always open when sidebar is expanded ─── */
+/* ─── Collapsible sub-menu with toggle ─── */
 const Menu = ({
     children,
     items,
     collapsed,
+    currentPath,
 }: {
     children: React.ReactNode;
     items: MenuItem[];
     collapsed: boolean;
+    currentPath: string;
 }) => {
+    const [isOpen, setIsOpen] = useState(true);
+    const isAnyChildActive = items.some((item) => currentPath === item.href);
+
     return (
         <div>
-            <div
-                className="w-full flex items-center justify-between text-gray-400 p-2 rounded-lg"
+            <button
+                onClick={() => !collapsed && setIsOpen((v) => !v)}
+                className="w-full flex items-center justify-between text-gray-400 p-2 rounded-lg hover:bg-white/5 transition-colors duration-150"
             >
                 <div className="flex items-center gap-x-2">{children}</div>
                 {!collapsed && (
@@ -30,7 +38,7 @@ const Menu = ({
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                         fill="currentColor"
-                        className="w-5 h-5 rotate-180"
+                        className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                         aria-hidden="true"
                     >
                         <path
@@ -40,29 +48,43 @@ const Menu = ({
                         />
                     </svg>
                 )}
-            </div>
+            </button>
 
-            {!collapsed && (
-                <ul id="submenu" className="mx-4 px-2 border-l border-[#2a2a2a] text-sm font-medium">
-                    {items.map((item, idx) => (
-                        <li key={idx}>
-                            <a
-                                href={item.href}
-                                className="flex items-center gap-x-2 text-gray-400 p-2 rounded-lg hover:bg-white/5 active:bg-white/10 duration-150"
-                            >
-                                {item.icon ? <div className="text-gray-500">{item.icon}</div> : null}
-                                {item.name}
-                            </a>
-                        </li>
-                    ))}
+            {/* Animated panel */}
+            <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${!collapsed && isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+            >
+                <ul className="mx-4 px-2 border-l border-[#2a2a2a] text-sm font-medium mt-1">
+                    {items.map((item, idx) => {
+                        const isActive = currentPath === item.href;
+                        return (
+                            <li key={idx}>
+                                <Link
+                                    href={item.href}
+                                    className={`flex items-center gap-x-2 p-2 rounded-lg transition-colors duration-150 ${isActive
+                                        ? "text-white bg-white/8"
+                                        : "text-gray-400 hover:text-gray-200 hover:bg-white/5 active:bg-white/10"
+                                        }`}
+                                >
+                                    {item.icon ? <div className="text-gray-500">{item.icon}</div> : null}
+                                    <span>{item.name}</span>
+                                    {isActive && (
+                                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white/60" />
+                                    )}
+                                </Link>
+                            </li>
+                        );
+                    })}
                 </ul>
-            )}
+            </div>
         </div>
     );
 };
 
 /* ─── Sidebar ─── */
 const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
+    const pathname = usePathname();
 
     const navigation: MenuItem[] = [
         {
@@ -87,7 +109,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
 
     const navsFooter: MenuItem[] = [
         {
-            href: "javascript:void(0)",
+            href: "#",
             name: "Help",
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -96,7 +118,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
             ),
         },
         {
-            href: "javascript:void(0)",
+            href: "#",
             name: "Settings",
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -111,40 +133,29 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
         { name: "Badge", href: "/Documentation/Components/badge" },
         { name: "Button", href: "/Documentation/Components/button" },
         { name: "Card", href: "/Documentation/Components/card" },
+        { name: "Comet Card", href: "/Documentation/Components/comet-card" },
+        { name: "Draggable Card", href: "/Documentation/Components/draggable-card" },
         { name: "Login", href: "/Documentation/Components/login" },
         { name: "Signup", href: "/Documentation/Components/signup" },
     ];
 
-    const profileRef = useRef<HTMLButtonElement | null>(null);
-    const [isProfileActive, setIsProfileActive] = useState(false);
-
-    useEffect(() => {
-        const handleProfile = (e: MouseEvent) => {
-            if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
-                setIsProfileActive(false);
-            }
-        };
-        document.addEventListener("click", handleProfile);
-        return () => document.removeEventListener("click", handleProfile);
-    }, []);
-
     return (
         <>
             <nav
-                className={`fixed top-0 left-0 h-full border-r border-[#1a1a1a] bg-[#0a0a0a] space-y-8 transition-all duration-300 ease-in-out z-20 ${collapsed ? "w-[68px]" : "w-65"
+                className={`fixed top-0 left-0 h-full border-r border-[#1a1a1a] bg-[#0a0a0a] transition-all duration-300 ease-in-out z-20 ${collapsed ? "w-[68px]" : "w-65"
                     }`}
             >
                 <div className="flex flex-col h-full px-2">
-                    {/* ── Header: avatar + collapse toggle ── */}
-                    <div className="h-20 flex items-center justify-between px-2">
+                    {/* ── Header: brand + collapse toggle ── */}
+                    <div className="h-20 flex items-center justify-between px-2 shrink-0">
                         {!collapsed && (
-                            <div className="flex items-center gap-x-3 min-w-0">
+                            <Link href="/" className="flex items-center gap-x-3 min-w-0 group">
                                 <div className="truncate">
-                                    <span className="block text-gray-200 text-3xl font-semibold truncate">
+                                    <span className="block text-gray-200 text-2xl font-bold truncate group-hover:text-white transition-colors">
                                         Dexterity UI
                                     </span>
                                 </div>
-                            </div>
+                            </Link>
                         )}
 
                         {/* Collapse / expand button */}
@@ -167,29 +178,40 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                         </button>
                     </div>
 
-                    {/* ── Navigation links ── */}
-                    <div className="overflow-auto flex-1">
-                        <ul className="text-sm font-medium flex-1 space-y-1">
-                            {navigation.map((item, idx) => (
-                                <li key={idx} className="group relative">
-                                    <a
-                                        href={item.href}
-                                        className="flex items-center gap-x-3 text-gray-400 p-2 rounded-lg hover:bg-white/5 hover:text-gray-200 active:bg-white/10 duration-150"
-                                    >
-                                        <div className="text-gray-500 group-hover:text-gray-300 shrink-0">{item.icon}</div>
-                                        {!collapsed && <span>{item.name}</span>}
-                                    </a>
-                                    {/* Tooltip when collapsed */}
-                                    {collapsed && (
-                                        <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md bg-[#1a1a1a] text-gray-200 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-50">
-                                            {item.name}
-                                        </div>
-                                    )}
-                                </li>
-                            ))}
+                    {/* ── Thin separator ── */}
+                    <div className="mx-2 border-t border-[#1a1a1a] mb-3 shrink-0" />
+
+                    {/* ── Navigation links (scrollable) ── */}
+                    <div className="overflow-y-auto flex-1 scrollbar-thin">
+                        <ul className="text-sm font-medium space-y-1">
+                            {navigation.map((item, idx) => {
+                                const isActive = pathname === item.href;
+                                return (
+                                    <li key={idx} className="group relative">
+                                        <Link
+                                            href={item.href}
+                                            className={`flex items-center gap-x-3 p-2 rounded-lg transition-colors duration-150 ${isActive
+                                                ? "text-white bg-white/8"
+                                                : "text-gray-400 hover:bg-white/5 hover:text-gray-200 active:bg-white/10"
+                                                }`}
+                                        >
+                                            <div className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"}`}>
+                                                {item.icon}
+                                            </div>
+                                            {!collapsed && <span>{item.name}</span>}
+                                        </Link>
+                                        {/* Tooltip when collapsed */}
+                                        {collapsed && (
+                                            <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md bg-[#1a1a1a] text-gray-200 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-50">
+                                                {item.name}
+                                            </div>
+                                        )}
+                                    </li>
+                                );
+                            })}
 
                             <li>
-                                <Menu items={nestedNav} collapsed={collapsed}>
+                                <Menu items={nestedNav} collapsed={collapsed} currentPath={pathname}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -198,34 +220,33 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                                         stroke="currentColor"
                                         className="w-5 h-5 text-gray-500 shrink-0"
                                     >
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L12 12.75 6.429 9.75m11.142 0l4.179 2.25L12 17.25 2.25 12l4.179-2.25m11.142 0L12 7.5" />
                                     </svg>
                                     {!collapsed && "Components"}
                                 </Menu>
                             </li>
                         </ul>
+                    </div>
 
-                        {/* ── Footer nav ── */}
-                        <div className="pt-2 mt-2 border-t border-[#1a1a1a]">
-                            <ul className="text-sm font-medium space-y-1">
-                                {navsFooter.map((item, idx) => (
-                                    <li key={idx} className="group relative">
-                                        <a
-                                            href={item.href}
-                                            className="flex items-center gap-x-3 text-gray-400 p-2 rounded-lg hover:bg-white/5 hover:text-gray-200 active:bg-white/10 duration-150"
-                                        >
-                                            <div className="text-gray-500 group-hover:text-gray-300 shrink-0">{item.icon}</div>
-                                            {!collapsed && <span>{item.name}</span>}
-                                        </a>
-                                        {collapsed && (
-                                            <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md bg-[#1a1a1a] text-gray-200 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-50">
-                                                {item.name}
-                                            </div>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                    {/* ── Footer nav — pinned to bottom ── */}
+                    <div className="pt-2 mt-auto border-t border-[#1a1a1a] pb-4 shrink-0">
+                        <ul className="text-sm font-medium space-y-1">
+                            {navsFooter.map((item, idx) => (
+                                <li key={idx} className="group relative">
+                                    <button
+                                        className="w-full flex items-center gap-x-3 text-gray-400 p-2 rounded-lg hover:bg-white/5 hover:text-gray-200 active:bg-white/10 duration-150"
+                                    >
+                                        <div className="text-gray-500 group-hover:text-gray-300 shrink-0">{item.icon}</div>
+                                        {!collapsed && <span>{item.name}</span>}
+                                    </button>
+                                    {collapsed && (
+                                        <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md bg-[#1a1a1a] text-gray-200 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-50">
+                                            {item.name}
+                                        </div>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </nav>
