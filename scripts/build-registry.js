@@ -18,6 +18,23 @@ if (!fs.existsSync(publicRDir)) {
 
 // Generate individual JSON files for each component
 registry.items.forEach((item) => {
+  // Read and embed the actual file content for each file entry
+  const filesWithContent = item.files.map((file) => {
+    const srcPath = path.join(projectRoot, file.path);
+    let content = '';
+    if (fs.existsSync(srcPath)) {
+      content = fs.readFileSync(srcPath, 'utf-8');
+    } else {
+      console.warn(`  ⚠ File not found: ${file.path}`);
+    }
+    return {
+      path: file.path,
+      content,
+      type: file.type,
+      target: file.target || '',
+    };
+  });
+
   const componentJson = {
     $schema: 'https://ui.shadcn.com/schema/registry-item.json',
     name: item.name,
@@ -25,7 +42,7 @@ registry.items.forEach((item) => {
     description: item.description,
     dependencies: item.dependencies || [],
     registryDependencies: item.registryDependencies || [],
-    files: item.files,
+    files: filesWithContent,
     type: item.type,
   };
 
