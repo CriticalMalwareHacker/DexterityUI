@@ -186,6 +186,6 @@ export const DraggableCardContainer = ({
     children?: React.ReactNode;
 }) => {
     return (
-        <div className={cn("[perspective:3000px]", className)}>{children}</div>
+        <div className={cn("perspective-[3000px]", className)}>{children}</div>
     );
 };
